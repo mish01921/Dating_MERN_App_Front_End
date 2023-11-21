@@ -1,26 +1,23 @@
-import { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./DatingCards.css";
 import DatingCard from "react-tinder-card";
+import axios from "axios"
 
-const DatingCards = () => {
-  const [people, setPeople] = useState([
  
-    {
-      name: "Random Girl",
-      imgUrl:
-        "https://th.bing.com/th/id/OIP.0XppHHG5qIDHsvQQS4I7iQHaNK?rs=1&pid=ImgDetMain",
-    },
-    {
-      name: "Another Girl",
-      imgUrl: "https://cdn.acidcow.com/pics/20140506/random_cute_girls_44.jpg",
-    },
-    {
-        name: "Random Guy",
-        imgUrl:
-          "https://th.bing.com/th/id/OIP.LWgYHlsfEMh6OH7N7tcDxwHaKX?rs=1&pid=ImgDetMain",
-      },
-      { name: "Another Guy", imgUrl: "https://i.redd.it/tkm6dn0t7ti21.jpg" },
-  ]);
+const DatingCards = () => {
+  const [people, setPeople] = useState([])
+ 
+  const fetchData = async() => {
+    try {
+      const response =await axios.get("http://localhost:8001/dating/cards")
+      setPeople(response.data)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const swiped = (direction, nameToDelete) => {
     console.log("receiving " + nameToDelete);
